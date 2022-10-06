@@ -8,6 +8,9 @@ import java.util.Optional;
 
 public interface GenericService<E, M> {
     E save(E entity);
+
+    List<E> save(List<E> entities);
+
     void deleteById(M id);
 
     Optional<E> findById(M id);
