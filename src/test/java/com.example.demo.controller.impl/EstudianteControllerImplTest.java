@@ -1,10 +1,10 @@
 package com.example.demo.controller.impl;
 
-import com.example.demo.mapper.PersonaMapper;
-import com.example.demo.model.Persona;
-import com.example.demo.service.PersonaService;
+import com.example.demo.mapper.EstudianteMapper;
+import com.example.demo.model.Estudiante;
+import com.example.demo.service.EstudianteService;
 import com.example.demo.util.CustomUtils;
-import com.example.demo.util.PersonaBuilder;
+import com.example.demo.util.EstudianteBuilder;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.Is;
 import org.junit.Before;
@@ -27,28 +27,28 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @SpringBootTest
 @AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
-public class PersonaControllerImplTest {
-    //TODO: create the data Test generator class PersonaBuilder
-    private static final String ENDPOINT_URL = "/personas";
+public class EstudianteControllerImplTest {
+    //TODO: create the data Test generator class EstudianteBuilder
+    private static final String ENDPOINT_URL = "/estudiantes";
     @InjectMocks
-    private PersonaControllerImpl personaController;
+    private EstudianteControllerImpl estudianteController;
     @MockBean
-    private PersonaService personaService;
+    private EstudianteService estudianteService;
     @MockBean
-    private PersonaMapper personaMapper;
+    private EstudianteMapper estudianteMapper;
     @Autowired
     private MockMvc mockMvc;
 
     @Before
     public void setup() {
-        this.mockMvc = MockMvcBuilders.standaloneSetup(this.personaController).build();
+        this.mockMvc = MockMvcBuilders.standaloneSetup(this.estudianteController).build();
     }
 
     @Test
     public void getAll() throws Exception {
-        Mockito.when(personaMapper.asDTOList(ArgumentMatchers.any())).thenReturn(PersonaBuilder.getListDTO());
+        Mockito.when(estudianteMapper.asDTOList(ArgumentMatchers.any())).thenReturn(EstudianteBuilder.getListDTO());
 
-        Mockito.when(personaService.findAll()).thenReturn(PersonaBuilder.getListEntities());
+        Mockito.when(estudianteService.findAll()).thenReturn(EstudianteBuilder.getListEntities());
         mockMvc.perform(MockMvcRequestBuilders.get(ENDPOINT_URL))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content()
@@ -59,54 +59,54 @@ public class PersonaControllerImplTest {
 
     @Test
     public void getById() throws Exception {
-        Mockito.when(personaMapper.asDTO(ArgumentMatchers.any())).thenReturn(PersonaBuilder.getDTO());
+        Mockito.when(estudianteMapper.asDTO(ArgumentMatchers.any())).thenReturn(EstudianteBuilder.getDTO());
 
-        Mockito.when(personaService.findById(ArgumentMatchers.anyLong())).thenReturn(java.util.Optional.of(PersonaBuilder.getEntity()));
+        Mockito.when(estudianteService.findById(ArgumentMatchers.anyLong())).thenReturn(java.util.Optional.of(EstudianteBuilder.getEntity()));
 
         mockMvc.perform(MockMvcRequestBuilders.get(ENDPOINT_URL + "/1"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id", Is.is(1)));
-        Mockito.verify(personaService, Mockito.times(1)).findById(1L);
-        Mockito.verifyNoMoreInteractions(personaService);
+        Mockito.verify(estudianteService, Mockito.times(1)).findById(1L);
+        Mockito.verifyNoMoreInteractions(estudianteService);
     }
 
     @Test
     public void save() throws Exception {
-        Mockito.when(personaMapper.asEntity(ArgumentMatchers.any())).thenReturn(PersonaBuilder.getEntity());
-        Mockito.when(personaService.save(ArgumentMatchers.any(Persona.class))).thenReturn(PersonaBuilder.getEntity());
+        Mockito.when(estudianteMapper.asEntity(ArgumentMatchers.any())).thenReturn(EstudianteBuilder.getEntity());
+        Mockito.when(estudianteService.save(ArgumentMatchers.any(Estudiante.class))).thenReturn(EstudianteBuilder.getEntity());
 
         mockMvc.perform(
                         MockMvcRequestBuilders.post(ENDPOINT_URL)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(CustomUtils.asJsonString(PersonaBuilder.getDTO())))
+                                .content(CustomUtils.asJsonString(EstudianteBuilder.getDTO())))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
-        Mockito.verify(personaService, Mockito.times(1)).save(ArgumentMatchers.any(Persona.class));
-        Mockito.verifyNoMoreInteractions(personaService);
+        Mockito.verify(estudianteService, Mockito.times(1)).save(ArgumentMatchers.any(Estudiante.class));
+        Mockito.verifyNoMoreInteractions(estudianteService);
     }
 
     @Test
     public void update() throws Exception {
-        Mockito.when(personaMapper.asEntity(ArgumentMatchers.any())).thenReturn(PersonaBuilder.getEntity());
-        Mockito.when(personaService.update(ArgumentMatchers.any(), ArgumentMatchers.anyLong())).thenReturn(PersonaBuilder.getEntity());
+        Mockito.when(estudianteMapper.asEntity(ArgumentMatchers.any())).thenReturn(EstudianteBuilder.getEntity());
+        Mockito.when(estudianteService.update(ArgumentMatchers.any(), ArgumentMatchers.anyLong())).thenReturn(EstudianteBuilder.getEntity());
 
         mockMvc.perform(
                         MockMvcRequestBuilders.put(ENDPOINT_URL + "/1")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(CustomUtils.asJsonString(PersonaBuilder.getDTO())))
+                                .content(CustomUtils.asJsonString(EstudianteBuilder.getDTO())))
                 .andExpect(MockMvcResultMatchers.status().isOk());
-        Mockito.verify(personaService, Mockito.times(1)).update(ArgumentMatchers.any(Persona.class), ArgumentMatchers.anyLong());
-        Mockito.verifyNoMoreInteractions(personaService);
+        Mockito.verify(estudianteService, Mockito.times(1)).update(ArgumentMatchers.any(Estudiante.class), ArgumentMatchers.anyLong());
+        Mockito.verifyNoMoreInteractions(estudianteService);
     }
 
     @Test
     public void delete() throws Exception {
-        Mockito.doNothing().when(personaService).deleteById(ArgumentMatchers.anyLong());
+        Mockito.doNothing().when(estudianteService).deleteById(ArgumentMatchers.anyLong());
         mockMvc.perform(
                         MockMvcRequestBuilders.delete(ENDPOINT_URL + "/1"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
-        Mockito.verify(personaService, Mockito.times(1)).deleteById(Mockito.anyLong());
-        Mockito.verifyNoMoreInteractions(personaService);
+        Mockito.verify(estudianteService, Mockito.times(1)).deleteById(Mockito.anyLong());
+        Mockito.verifyNoMoreInteractions(estudianteService);
     }
 }

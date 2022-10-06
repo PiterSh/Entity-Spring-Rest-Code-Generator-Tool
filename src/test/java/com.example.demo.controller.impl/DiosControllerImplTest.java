@@ -1,10 +1,10 @@
 package com.example.demo.controller.impl;
 
-import com.example.demo.mapper.PersonaMapper;
-import com.example.demo.model.Persona;
-import com.example.demo.service.PersonaService;
+import com.example.demo.mapper.DiosMapper;
+import com.example.demo.model.Dios;
+import com.example.demo.service.DiosService;
 import com.example.demo.util.CustomUtils;
-import com.example.demo.util.PersonaBuilder;
+import com.example.demo.util.DiosBuilder;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.Is;
 import org.junit.Before;
@@ -27,28 +27,28 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @SpringBootTest
 @AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
-public class PersonaControllerImplTest {
-    //TODO: create the data Test generator class PersonaBuilder
-    private static final String ENDPOINT_URL = "/personas";
+public class DiosControllerImplTest {
+    //TODO: create the data Test generator class DiosBuilder
+    private static final String ENDPOINT_URL = "/dioss";
     @InjectMocks
-    private PersonaControllerImpl personaController;
+    private DiosControllerImpl diosController;
     @MockBean
-    private PersonaService personaService;
+    private DiosService diosService;
     @MockBean
-    private PersonaMapper personaMapper;
+    private DiosMapper diosMapper;
     @Autowired
     private MockMvc mockMvc;
 
     @Before
     public void setup() {
-        this.mockMvc = MockMvcBuilders.standaloneSetup(this.personaController).build();
+        this.mockMvc = MockMvcBuilders.standaloneSetup(this.diosController).build();
     }
 
     @Test
     public void getAll() throws Exception {
-        Mockito.when(personaMapper.asDTOList(ArgumentMatchers.any())).thenReturn(PersonaBuilder.getListDTO());
+        Mockito.when(diosMapper.asDTOList(ArgumentMatchers.any())).thenReturn(DiosBuilder.getListDTO());
 
-        Mockito.when(personaService.findAll()).thenReturn(PersonaBuilder.getListEntities());
+        Mockito.when(diosService.findAll()).thenReturn(DiosBuilder.getListEntities());
         mockMvc.perform(MockMvcRequestBuilders.get(ENDPOINT_URL))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content()
@@ -59,54 +59,54 @@ public class PersonaControllerImplTest {
 
     @Test
     public void getById() throws Exception {
-        Mockito.when(personaMapper.asDTO(ArgumentMatchers.any())).thenReturn(PersonaBuilder.getDTO());
+        Mockito.when(diosMapper.asDTO(ArgumentMatchers.any())).thenReturn(DiosBuilder.getDTO());
 
-        Mockito.when(personaService.findById(ArgumentMatchers.anyLong())).thenReturn(java.util.Optional.of(PersonaBuilder.getEntity()));
+        Mockito.when(diosService.findById(ArgumentMatchers.anyLong())).thenReturn(java.util.Optional.of(DiosBuilder.getEntity()));
 
         mockMvc.perform(MockMvcRequestBuilders.get(ENDPOINT_URL + "/1"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id", Is.is(1)));
-        Mockito.verify(personaService, Mockito.times(1)).findById(1L);
-        Mockito.verifyNoMoreInteractions(personaService);
+        Mockito.verify(diosService, Mockito.times(1)).findById(1L);
+        Mockito.verifyNoMoreInteractions(diosService);
     }
 
     @Test
     public void save() throws Exception {
-        Mockito.when(personaMapper.asEntity(ArgumentMatchers.any())).thenReturn(PersonaBuilder.getEntity());
-        Mockito.when(personaService.save(ArgumentMatchers.any(Persona.class))).thenReturn(PersonaBuilder.getEntity());
+        Mockito.when(diosMapper.asEntity(ArgumentMatchers.any())).thenReturn(DiosBuilder.getEntity());
+        Mockito.when(diosService.save(ArgumentMatchers.any(Dios.class))).thenReturn(DiosBuilder.getEntity());
 
         mockMvc.perform(
                         MockMvcRequestBuilders.post(ENDPOINT_URL)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(CustomUtils.asJsonString(PersonaBuilder.getDTO())))
+                                .content(CustomUtils.asJsonString(DiosBuilder.getDTO())))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
-        Mockito.verify(personaService, Mockito.times(1)).save(ArgumentMatchers.any(Persona.class));
-        Mockito.verifyNoMoreInteractions(personaService);
+        Mockito.verify(diosService, Mockito.times(1)).save(ArgumentMatchers.any(Dios.class));
+        Mockito.verifyNoMoreInteractions(diosService);
     }
 
     @Test
     public void update() throws Exception {
-        Mockito.when(personaMapper.asEntity(ArgumentMatchers.any())).thenReturn(PersonaBuilder.getEntity());
-        Mockito.when(personaService.update(ArgumentMatchers.any(), ArgumentMatchers.anyLong())).thenReturn(PersonaBuilder.getEntity());
+        Mockito.when(diosMapper.asEntity(ArgumentMatchers.any())).thenReturn(DiosBuilder.getEntity());
+        Mockito.when(diosService.update(ArgumentMatchers.any(), ArgumentMatchers.anyLong())).thenReturn(DiosBuilder.getEntity());
 
         mockMvc.perform(
                         MockMvcRequestBuilders.put(ENDPOINT_URL + "/1")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(CustomUtils.asJsonString(PersonaBuilder.getDTO())))
+                                .content(CustomUtils.asJsonString(DiosBuilder.getDTO())))
                 .andExpect(MockMvcResultMatchers.status().isOk());
-        Mockito.verify(personaService, Mockito.times(1)).update(ArgumentMatchers.any(Persona.class), ArgumentMatchers.anyLong());
-        Mockito.verifyNoMoreInteractions(personaService);
+        Mockito.verify(diosService, Mockito.times(1)).update(ArgumentMatchers.any(Dios.class), ArgumentMatchers.anyLong());
+        Mockito.verifyNoMoreInteractions(diosService);
     }
 
     @Test
     public void delete() throws Exception {
-        Mockito.doNothing().when(personaService).deleteById(ArgumentMatchers.anyLong());
+        Mockito.doNothing().when(diosService).deleteById(ArgumentMatchers.anyLong());
         mockMvc.perform(
                         MockMvcRequestBuilders.delete(ENDPOINT_URL + "/1"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
-        Mockito.verify(personaService, Mockito.times(1)).deleteById(Mockito.anyLong());
-        Mockito.verifyNoMoreInteractions(personaService);
+        Mockito.verify(diosService, Mockito.times(1)).deleteById(Mockito.anyLong());
+        Mockito.verifyNoMoreInteractions(diosService);
     }
 }

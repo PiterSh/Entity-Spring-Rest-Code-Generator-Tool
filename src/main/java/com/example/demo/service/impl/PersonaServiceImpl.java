@@ -27,6 +27,11 @@ public class PersonaServiceImpl implements PersonaService {
     }
 
     @Override
+    public List<Persona> save(List<Persona> entities) {
+        return (List<Persona>) repository.saveAll(entities);
+    }
+
+    @Override
     public void deleteById(Long id) {
         repository.deleteById(id);
     }
